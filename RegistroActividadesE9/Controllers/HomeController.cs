@@ -64,40 +64,42 @@ namespace RegistroActividadesE9.Controllers
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(token);
 
-            var role = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "role");
-            var name = jwtToken.Claims.FirstOrDefault(x => x.Type == "username");
-            var id = jwtToken.Claims.FirstOrDefault(x => x.Type == "IdDepartamento");
-            var idsuperior = jwtToken.Claims.FirstOrDefault(x => x.Type == "IdSuperior");
 
-            if (role is null || name is null || id is null)
+            var nameClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name);
+            var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role);
+            var idDepartamentoClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "IdDepartamento");
+
+
+
+
+            if (roleClaim is null || nameClaim is null || idDepartamentoClaim is null)
             {
                 ModelState.AddModelError(string.Empty, "Error en la autenticación");
                 return View(viewModel);
             }
 
-            var claims = new List<Claim>
+           
+            List<Claim> claims = new List<Claim>()
             {
-                new (ClaimTypes.Role, role.Value),
-                new (ClaimTypes.NameIdentifier, id.Value),
-                new (ClaimTypes.Name, name.Value),
-                new (ClaimTypes.UserData, token)
+                new Claim(ClaimTypes.Name, nameClaim.Value),
+                new Claim(ClaimTypes.Role, roleClaim.Value),
+                new Claim("idDepartamento", idDepartamentoClaim.ToString()),
+              
+            
+
             };
+          
 
             var identity = new ClaimsIdentity(claims, "login");
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-            if (role.Value == "Admin")
+            if (roleClaim.Value == "Admin")
             {
                 return RedirectToAction("Index", "Home", new { area = "Admin" });
             }
 
             return RedirectToAction("Index", "Home", new { area = "Usuario" });
-        }
-
-        public IActionResult Denied()
-        {
-            return View();
         }
 
         [HttpGet("/cerrarSesion")]

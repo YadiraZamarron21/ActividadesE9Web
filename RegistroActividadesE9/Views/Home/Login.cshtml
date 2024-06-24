@@ -18,11 +18,11 @@
         <form action="~/iniciarSesion" method="post">
         
             <div class="user-box">
-                <input asp-for="Usuario" type="text" name="nombre" required="">
+                <input asp-for="@Model.nombre" type="text"  required>
                 <label>Username</label>
             </div>
             <div class="user-box">
-                <input asp-for="Contraseña" type="password" name="" required="">
+                <input asp-for="@Model.contrasena" type="password" required>
                 <label>Password</label>
             </div>
             <div class="button-container">

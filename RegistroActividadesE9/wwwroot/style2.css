@@ -89,14 +89,14 @@
 .logout {
   text-align: right;
 }
-#Nombre {
+/*#Nombre {
   margin-top: -85px;
   margin-left: 1010px; 
   color: #B1D0E0;
   padding: 10px 10px;
   text-align: right;
   font-size: 15px;
-}
+}*/
 
 .logout a {
   color: #fff;
