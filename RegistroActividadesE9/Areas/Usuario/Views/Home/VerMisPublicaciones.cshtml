@@ -1,0 +1,68 @@
+﻿@using System.Security.Claims
+@model RegistroActividadesE9.Areas.Admin.Models.ActividadesViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Views/Shared/Layout.cshtml";
+    var userIdDepartamento = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+    var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+}
+
+<main class="container">
+    <div>
+        <div class="department">
+            <div id="userIdDepartamento" hidden data-user-id="@userIdDepartamento"></div>
+            <div id="role" hidden data-user-role="@role"></div>
+
+            @foreach (var actividades in Model.Actividades)
+            {
+                if (actividades.estado == 1)
+                {
+                    <div class="post multiple-images">
+                        <h3> @actividades.titulo</h3>
+                        <span class="date"> @actividades.fechaCreacion.ToString("dd/MM/yyyy")</span>
+                        <p>@Html.Raw(actividades.descripcion)</p>
+                        <img src="https://actividadese9.websitos256.com/images/0.png" asp-append-version alt="Evidencia en fotografía">
+                        <div class="button-container2">
+                            <a href="~/Admin/Home/VerMisPublicaciones/Editar/{@actividades.id}"><img id="img" src="https://cdn-icons-png.flaticon.com/512/1043/1043838.png" /></a>
+
+                            <a onclick="ConfirmElimiarActividad(@(actividades.id))"> <img id="img" src="https://cdn-icons-png.flaticon.com/512/216/216923.png" /></a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <a class="floating" href="~/Admin/Home/VerMisPublicaciones/Borradores">
+        <img id="img2" src="https://cdn-icons-png.flaticon.com/512/17/17764.png" />
+    </a>
+</main>
+
+<div class="confirmation-box">
+    <h2>¿Desea eliminar la publicación?</h2>
+    <div class="button-container">
+        <a href="javascript:" class="confirm-delete-actividad-button">Sí</a>
+        <a href="javascript:" class="confirm-delete-actividad-button">No</a>
+    </div>
+</div>
+
+
+<script>
+    function ConfirmElimiarActividad(id) {
+        var confirmDelete = document.querySelector('.confirmation-box');
+        confirmDelete.style.display = 'block';
+        confirmDelete.style.opacity = '100';
+        confirmDelete.style.zIndex = '4';
+
+
+        var confirmDeleteButtons = document.querySelectorAll('.confirm-delete-actividad-buttonn');
+        confirmDeleteButtons[0].addEventListener('click', function () {
+            window.location.href = '/Usuario/Home/Eliminar/' + id;
+        });
+
+        confirmDeleteButtons[1].addEventListener('click', function () {
+            confirmDelete.style.display = 'none';
+        });
+    }
+</script>
+

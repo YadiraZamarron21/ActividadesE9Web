@@ -1,0 +1,57 @@
+﻿@using System.Security.Claims
+@model RegistroActividadesE9.Areas.Admin.Models.ActividadesViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+<main>
+
+    <ul class="department-list" id="departmentList">
+
+        @foreach (var item in Model.Departamentos)
+        {
+            <li class="department-item">
+                <span>@item.nombre</span>
+                <div class="button-container2">
+                    <a href="~/Admin/Departamentos/Editar/{@item.id}"><img id="img" src="https://cdn-icons-png.flaticon.com/512/1043/1043838.png" /></a>
+
+                    <a onclick="ConfirmElimiarDepartamento(@(item.id))"> <img id="img" src="https://cdn-icons-png.flaticon.com/512/216/216923.png" /></a>
+                </div>
+            </li>
+        }
+
+    </ul>
+
+
+    <a class="floating-button" href="~/Admin/Departamentos/Agregar">
+        <img id="img3" src="https://cdn-icons-png.flaticon.com/512/2740/2740600.png" />
+    </a>
+</main>
+
+<div class="confirmation-box">
+    <h2>¿Desea eliminar el departamento?<br /></h2>
+    <div class="button-container">
+        <a href="javascript:" class="confirm-delete-departamento-button">Sí</a>
+        <a href="javascript:" class="confirm-delete-departamento-button">No</a>
+    </div>
+</div>
+
+<script>
+    function ConfirmElimiarDepartamento(id) {
+        var confirmDelete = document.querySelector('.confirmation-box');
+        confirmDelete.style.display = 'block';
+        confirmDelete.style.opacity = '100';
+        confirmDelete.style.zIndex = '4';
+
+
+        var confirmDeleteButtons = document.querySelectorAll('.confirm-delete-departamento-button');
+        confirmDeleteButtons[0].addEventListener('click', function () {
+            window.location.href = '/Admin/Departamentos/Eliminar/' + id;
+        });
+
+        confirmDeleteButtons[1].addEventListener('click', function () {
+            confirmDelete.style.display = 'none';
+        });
+    }
+</script>

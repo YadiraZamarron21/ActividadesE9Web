@@ -1,0 +1,50 @@
+﻿@using System.Security.Claims
+@model RegistroActividadesE9.Areas.Admin.Models.EDepartamentoViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Views/Shared/LayoutDepartamento.cshtml";
+}
+
+<main class="agg">
+    <div class="containerAgregar">
+        <h2>Editar Departamento</h2>
+        <form action="~/Admin/Departamentos/Editar" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="hidden" name="id" asp-for=id id="id">
+                <label for="nombre">Nombre:</label>
+                <input type="text" asp-for="nombre" id="nombre" name="nombre" required>
+
+            </div>
+            <div class="form-group">
+                <label for="usuario">Usuario:</label>
+                <input type="text" asp-for="usuario" id="usuario" name="usuario" required>
+            </div>
+
+
+            <div class="form-group">
+                <label for="contrasena">Contraseña:</label>
+                <input type="password" asp-for="contraseña" id="contraseña" name="contraseña" required>
+            </div>
+            <div class="form-group">
+                <label class="actividad-form-label" for="IdDepartamentoSuperior">Departamento superior</label>
+                <select class="actividad-form-input" asp-for="idSuperior" required>
+                    <option value="0">Ningúno</option>
+                    @foreach (var departamento in Model.Departamentos)
+                    {
+                        <option value="@departamento.id">@departamento.nombre</option>
+                    }
+                </select>
+            </div>
+     
+            <p id="error">@Html.ValidationSummary(true)</p>
+            <div class="form-group button-group">
+               
+                <a><input type="submit" class="accept-button" value="Editar"></a>
+
+                <a href="~/Admin/Departamentos">
+                    <input type="button" class="cancel-button" value="Cancelar">
+                </a>
+            </div>
+        </form>
+    </div>
+</main>

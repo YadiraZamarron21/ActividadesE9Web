@@ -1,0 +1,42 @@
+﻿@using System.Security.Claims
+@model RegistroActividadesE9.Areas.Admin.Models.ActividadesViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Views/Shared/Layout.cshtml";
+    var userIdDepartamento = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+    var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+}
+<main class="principal">
+
+    <div class="container">
+        <div class="department">
+            <div id="userIdDepartamento" hidden data-user-id="@userIdDepartamento"></div>
+            <div id="role" hidden data-user-role="@role"></div>
+
+            @foreach (var item in Model.Departamentos)
+            {
+                <div class="department-name">@item.nombre</div>
+
+                    @foreach (var x in item.Actividades)
+                    {
+                        if (x.estado == 1)
+                        {
+                            <div class="post multiple-images">
+                                <h3>@x.titulo</h3>
+                                <span class="date">@x.fechaCreacion</span>
+                            <p>   @Html.Raw(x.descripcion)</p>
+                            <img src="https://actividadese9.websitos256.com/images/0.png" asp-append-version alt="Evidencia en fotografía">
+                            </div>
+                        }
+                     }
+            }
+        </div>
+
+
+    </div>
+
+    <a class="floating-button" href="~/Admin/Home/Agregar">
+        <img id="img3" src="https://cdn-icons-png.flaticon.com/512/2740/2740600.png" />
+    </a>
+
+</main>

@@ -1,0 +1,66 @@
+﻿@using System.Security.Claims
+@model RegistroActividadesE9.Areas.Usuario.Models.VerActividadViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+<main class="aggPub">
+    <div class="container3">
+        <h2>Editar Actividad</h2>
+        <form action="/ruta_de_tu_servidor" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="hidden" asp-for="activ.id">
+
+                <label for="titulo">Título de la Actividad:</label>
+                <input type="text" id="titulo" asp-for="activ.titulo" name="titulo" required>
+            </div>
+            <div class="form-group">
+                <label for="descripcion">Descripción:</label>
+                <textarea id="descripcion" name="descripcion" asp-for="activ.descripcion" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+
+                <label for="fechaRealizacion">Fecha de realizacion</label>
+                <label asp-for="activ.fechaRealizacion">@Model.activ.fechaRealizacion.Value.ToString("dd/MM/yyyy")</label>
+
+            </div>
+            <div class="form-group">
+                <label for="imagenes">Seleccionar Imágenes:</label>
+                <input type="file" class="actividad-form-input" id="imagenes" accept="image/*" multiple asp-for="activ.archivo">
+
+                <div class="actividad-form-img-preview">
+                    <img src="https://actividadese9.websitos256.com/images/@(Model.activ.id).png" asp-append-version height="100%" alt="imagen" class="actividad-form-img">
+                </div>
+            </div>
+            @Html.ValidationSummary(true)
+
+
+            <div class="form-group button-group">
+                <a>
+                    <input type="submit" value="Editar">
+                </a>
+                <a href="~/Usuario/Home/VerMisPublicacaciones">
+                    <input type="button" class="cancel-button" value="Cancelar">
+                </a>
+            </div>
+
+
+
+            <script>
+                let preview = document.querySelector('.actividad-form-img-preview img');
+                let input = document.querySelector('.actividad-form-input[type="file"]');
+                input.addEventListener('change', function () {
+                    let file = input.files[0];
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        preview.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                });
+                document.querySelector('.actividad-form-img-preview').addEventListener('click', function () {
+                    input.click();
+                });
+            </script>
+        </form>
+    </div>
+</main>
