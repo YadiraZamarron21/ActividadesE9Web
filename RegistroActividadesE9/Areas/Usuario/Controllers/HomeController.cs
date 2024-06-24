@@ -12,7 +12,7 @@ using RegistroActividadesE9.Helpers;
 
 namespace RegistroActividadesE9.Areas.Usuario.Controllers
 {
-    [Authorize(Roles = "Usuario")]
+  // [Authorize(Roles = "Usuario")]
     [Area("Usuario")]
     
     public class HomeController(HttpClient httpClient, IWebHostEnvironment webHostEnvironment) : Controller
@@ -25,12 +25,13 @@ namespace RegistroActividadesE9.Areas.Usuario.Controllers
             httpClient.BaseAddress = new Uri("https://actividadese9.websitos256.com/");
 
             var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var idusuario = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            //var idusuario = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
-            var reponseActividades = httpClient.GetAsync($"/api/actividad/{idusuario}");
-            var responseDepartamentos = httpClient.GetAsync($"/api/departamento/{idusuario}");
+            var reponseActividades = httpClient.GetAsync($"/api/actividad");
+            var responseDepartamentos = httpClient.GetAsync($"/api/departamento");
 
             Task.WaitAll(reponseActividades, responseDepartamentos);
 
@@ -70,8 +71,8 @@ namespace RegistroActividadesE9.Areas.Usuario.Controllers
             var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var idusuario = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            var response = await httpClient.GetAsync($"/api/departamento/{idusuario}");
+            //var idusuario = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var response = await httpClient.GetAsync($"/api/departamento/Agregar");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();

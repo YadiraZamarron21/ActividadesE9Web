@@ -8,6 +8,7 @@ using System.Text;
 using RegistroActividadesE9.Models.ViewModels;
 using System.Text.Json;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
 
 namespace RegistroActividadesE9.Controllers
 {
@@ -38,7 +39,8 @@ namespace RegistroActividadesE9.Controllers
         {
             client.BaseAddress = new Uri("https://actividadese9.websitos256.com/");
 
-
+            // Configurar el encabezado Authorization con el token JWT
+            
             var json = JsonSerializer.Serialize(viewModel);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -57,6 +59,8 @@ namespace RegistroActividadesE9.Controllers
 
             var token = await response.Content.ReadAsStringAsync();
 
+
+            // Configurar el encabezado Authorization con el token JWT
             // Agregar el token a las cabeceras de la petición
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
@@ -70,23 +74,19 @@ namespace RegistroActividadesE9.Controllers
             var idDepartamentoClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "IdDepartamento");
 
 
-
-
             if (roleClaim is null || nameClaim is null || idDepartamentoClaim is null)
             {
                 ModelState.AddModelError(string.Empty, "Error en la autenticación");
                 return View(viewModel);
             }
 
-           
+
             List<Claim> claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, nameClaim.Value),
                 new Claim(ClaimTypes.Role, roleClaim.Value),
                 new Claim("idDepartamento", idDepartamentoClaim.ToString()),
-              
-            
-
+                new Claim(ClaimTypes.UserData, token)
             };
           
 
@@ -95,6 +95,7 @@ namespace RegistroActividadesE9.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
             if (roleClaim.Value == "Admin")
+
             {
                 return RedirectToAction("Index", "Home", new { area = "Admin" });
             }

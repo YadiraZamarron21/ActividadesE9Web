@@ -14,7 +14,7 @@ using RegistroActividadesE9.Areas.Admin.Models.Dtos;
 
 namespace RegistroActividadesE9.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin")]
+  // [Authorize(Roles = "Admin")]
     [Area("Admin")]
     public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) : Controller
     {
@@ -30,10 +30,10 @@ namespace RegistroActividadesE9.Areas.Admin.Controllers
             var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var idusuario = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+           // var idusuario = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
-            var reponseActividades = httpClient.GetAsync($"/api/actividad/{idusuario}");
-            var responseDepartamentos = httpClient.GetAsync($"/api/departamento/{idusuario}");
+            var reponseActividades = httpClient.GetAsync($"/api/actividad");
+            var responseDepartamentos = httpClient.GetAsync($"/api/departamento");
 
 
             Task.WaitAll(reponseActividades, responseDepartamentos);

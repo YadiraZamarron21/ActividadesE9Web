@@ -1,17 +1,16 @@
-﻿@using System.Security.Claims
-@model RegistroActividadesE9.Areas.Admin.Models.ActividadesViewModel
+﻿@model RegistroActividadesE9.Areas.Admin.Models.ActividadesViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-    Layout = "~/Views/Shared/Layout.cshtml";
-    var userIdDepartamento = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
-    var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+    Layout = "~/Views/Shared/LayoutAdm.cshtml";
+    // var userIdDepartamento = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+    // var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 }
 <main class="principal">
 
     <div class="container">
         <div class="department">
-            <div id="userIdDepartamento" hidden data-user-id="@userIdDepartamento"></div>
-            <div id="role" hidden data-user-role="@role"></div>
+        @*     <div id="userIdDepartamento" hidden data-user-id="@userIdDepartamento"></div>
+            <div id="role" hidden data-user-role="@role"></div> *@
 
             @foreach (var item in Model.Departamentos)
             {

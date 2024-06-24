@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace RegistroActividadesE9.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [Area("Admin")]
     public class DepartamentosController : Controller
     {
@@ -23,8 +23,8 @@ namespace RegistroActividadesE9.Areas.Admin.Controllers
             var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var idusuario = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            var response = await httpClient.GetAsync($"/api/departamento/{idusuario}");
+           // var idusuario = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var response = await httpClient.GetAsync($"/api/departamento");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -49,14 +49,14 @@ namespace RegistroActividadesE9.Areas.Admin.Controllers
             var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var idusuario = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            var response = await httpClient.GetAsync($"/api/departamento/{idusuario}");
+          //  var idusuario = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var response = await httpClient.GetAsync($"/api/departamento/Agregar");
 
             if (!response.IsSuccessStatusCode) return View();
 
             var content = await response.Content.ReadAsStringAsync();
 
-            var resp = await httpClient.GetAsync($"/api/departamento/{idusuario}");
+            var resp = await httpClient.GetAsync($"/api/departamento/Agregar");
             if (resp.IsSuccessStatusCode)
             {
                 var content2 = await resp.Content.ReadAsStringAsync();
@@ -78,7 +78,7 @@ namespace RegistroActividadesE9.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Agregar(AgregarDepartamentosViewModel vm)
         {
-            var idusuario = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+           // var idusuario = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
             httpClient.BaseAddress = new Uri("https://actividadese9.websitos256.com/");
 
             var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
@@ -87,11 +87,11 @@ namespace RegistroActividadesE9.Areas.Admin.Controllers
             if (vm != null)
             {
 
-                if (vm.idSuperior == 0)
-                {
+                //if (vm.idSuperior == 0)
+                //{
 
-                    vm.idSuperior = int.Parse(idusuario);
-                }
+                //    vm.idSuperior = int.Parse(idusuario);
+                //}
                 var dep = new Departamentos()
                 {
                     id = 0,
@@ -113,7 +113,7 @@ namespace RegistroActividadesE9.Areas.Admin.Controllers
                 {
                     var error = await response.Content.ReadAsStringAsync();
                     ModelState.AddModelError("", error);
-                    var res = await httpClient.GetAsync($"/api/departamento/{idusuario}");
+                    var res = await httpClient.GetAsync($"/api/departamento/Agregar");
                     if (res.IsSuccessStatusCode)
                     {
                         var cont = await res.Content.ReadAsStringAsync();
